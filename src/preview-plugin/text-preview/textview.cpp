@@ -5,6 +5,7 @@
 #include "textpreview_global.h"
 #include "textview.h"
 #include "global/commontools.h"
+#include "grand-search/gui/exhibition/preview/generalwidget/aitoolbar.h"
 
 #include <QHBoxLayout>
 #include <QStackedWidget>
@@ -57,7 +58,7 @@ void TextView::showErrorPage()
     m_stackedWidget->setCurrentWidget(m_errLabel);
 
     static int width = 360;
-    static int height = 386;
+    static int height = 350;
     QImage errImg(":/icons/file_damaged.svg");
     errImg = errImg.scaled(70, 70);
     errImg = CommonTools::creatErrorImage({width, height}, errImg);
@@ -107,7 +108,7 @@ void TextView::initUI()
     this->setLayout(layout);
 
     layout->setSpacing(0);
-    this->setMinimumHeight(386);
+    this->setMinimumHeight(350);
 
     m_errLabel = new QLabel(this);
     m_stackedWidget = new QStackedWidget(this);
@@ -149,6 +150,9 @@ void TextView::initUI()
 void TextView::setSource(const QString &path)
 {
     m_browser->clear();
+    bool isShowAiToolBar = path.endsWith(".txt") || path.endsWith(".doc") || path.endsWith(".docx")  || path.endsWith(".xls")
+            || path.endsWith(".xlsx") || path.endsWith(".ppt") || path.endsWith(".pptx") || path.endsWith(".pdf");
+    this->setMinimumHeight((isShowAiToolBar && AiToolBar::checkUosAiInstalled()) ? 350 : 385);
 
     QFile file(path);
     if (file.open(QFile::ReadOnly)) {

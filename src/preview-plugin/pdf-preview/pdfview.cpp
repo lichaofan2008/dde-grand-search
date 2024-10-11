@@ -5,6 +5,7 @@
 #include "pdfpreview_global.h"
 #include "pdfview.h"
 #include "global/commontools.h"
+#include "grand-search/gui/exhibition/preview/generalwidget/aitoolbar.h"
 
 #include <dpdfpage.h>
 
@@ -20,7 +21,7 @@
 GRANDSEARCH_USE_NAMESPACE
 using namespace GrandSearch::pdf_preview;
 
-#define PAGE_FIXED_SIZE   QSize(360, 386)
+#define PAGE_FIXED_SIZE   QSize(360, 350)
 
 PDFView::PDFView(const QString &file, QWidget *parent)
     : QWidget(parent)
@@ -57,7 +58,7 @@ void PDFView::initUI()
     // 居中显示
     layout->addStretch();
     layout->addWidget(m_pageLabel);
-    layout->addStretch();
+    //layout->addStretch();
 
     if (m_isBadDoc) {
         showErrorPage();
@@ -110,6 +111,17 @@ void PDFView::onPageUpdated(QImage img)
 {
     auto pixmap = scaleAndRound(img);
     m_pageLabel->setPixmap(pixmap);
+
+    int height = PAGE_FIXED_SIZE.height();
+    if (!AiToolBar::checkUosAiInstalled()) {
+        height += 30;
+    }
+    // AI工具栏要紧贴预览画面
+    if (pixmap.height() != PAGE_FIXED_SIZE.height()) {
+        this->setFixedHeight((PAGE_FIXED_SIZE.height() - pixmap.height()) / 2 + pixmap.height());
+    } else {
+        this->setFixedHeight(PAGE_FIXED_SIZE.height());
+    }
 }
 
 void PDFView::syncLoadFirstPage()

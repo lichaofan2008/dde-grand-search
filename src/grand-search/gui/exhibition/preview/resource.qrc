@@ -6,5 +6,7 @@
         <file>icons/openpath-dark.svg</file>
         <file>icons/copypath-light.svg</file>
         <file>icons/copypath-dark.svg</file>
+        <file>icons/uos-ai-assistant.svg</file>
+        <file>icons/omit.svg</file>
     </qresource>
 </RCC>
